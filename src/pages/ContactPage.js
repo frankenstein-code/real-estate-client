@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
+import RequestType from "../enums/requestType"; // Import the enum from enums folder
 
 const ContactPage = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+    requestType: RequestType.BUYING, // Default to 'Buying'
+  });
 
+  // Handle form input change
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(form);
@@ -48,6 +56,19 @@ const ContactPage = () => {
             onChange={handleChange}
             required
           />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Request Type</Form.Label>
+          <Form.Control
+            as="select"
+            name="requestType"
+            value={form.requestType}
+            onChange={handleChange}
+            required
+          >
+            <option value={RequestType.BUYING}>Buying</option>
+            <option value={RequestType.SELLING}>Selling</option>
+          </Form.Control>
         </Form.Group>
         <Button variant="primary" type="submit">
           Submit
