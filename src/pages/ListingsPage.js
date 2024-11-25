@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { getListings } from "../services/apiService";
 
 const ListingPage = () => {
   const [listings, setListings] = useState([]);
@@ -8,20 +8,20 @@ const ListingPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    // Fetch all listings
-    axios
-      .get("http://localhost:5000/api/listings")
-      .then((response) => {
-        setListings(response.data);
-        setFilteredListings(response.data);
-      })
-      .catch((error) => {
+    const fetchListings = async () => {
+      try {
+        const data = await getListings();
+        setListings(data);
+        setFilteredListings(data);
+      } catch (error) {
         console.error("Error fetching listings:", error);
-      });
+      }
+    };
+
+    fetchListings();
   }, []);
 
   useEffect(() => {
-    // Filter listings based on the search query
     const filtered = listings.filter(
       (listing) =>
         listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

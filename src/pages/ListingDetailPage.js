@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { getListingById } from "../services/apiService";
 
 const ListingDetailPage = () => {
   const { id } = useParams(); // Get the listing ID from the URL
@@ -10,18 +10,20 @@ const ListingDetailPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch listing details from the backend API
-    axios
-      .get(`http://localhost:5000/api/listings/${id}`)
-      .then((response) => {
-        setListing(response.data);
+    // Fetch listing details using the service function
+    const fetchListing = async () => {
+      try {
+        const data = await getListingById(id); // Fetch listing by ID
+        setListing(data); // Set listing details to state
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
         setError("Failed to fetch listing details.");
         setLoading(false);
-      });
+      }
+    };
+
+    fetchListing();
   }, [id]);
 
   if (loading) return <p>Loading...</p>;
