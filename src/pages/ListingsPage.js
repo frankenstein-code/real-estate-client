@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import { getListings } from "../services/apiService";
+import ListingCard from "../components/ListingCard";
 
 const ListingPage = () => {
   const [listings, setListings] = useState([]);
@@ -44,24 +45,15 @@ const ListingPage = () => {
       </Row>
       <Row>
         {filteredListings.map((listing) => (
-          <Col md={4} key={listing.id} className="mb-4">
-            <Card>
-              <Card.Img variant="top" src={listing.image} alt={listing.title} />
-              <Card.Body>
-                <Card.Title>{listing.title}</Card.Title>
-                <Card.Text>{listing.description}</Card.Text>
-                <Card.Text>
-                  <strong>Price:</strong> ${listing.price}
-                </Card.Text>
-                <Card.Text>
-                  <strong>Location:</strong> {listing.location}
-                </Card.Text>
-                <Card.Link href={`/listings/${listing.id}`}>
-                  View Details
-                </Card.Link>
-              </Card.Body>
-            </Card>
-          </Col>
+          <ListingCard
+            key={listing.id}
+            id={listing.id}
+            title={listing.title}
+            description={listing.description}
+            price={listing.price}
+            location={listing.location}
+            image={listing.image}
+          />
         ))}
       </Row>
     </Container>
